@@ -52,3 +52,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Meins
+mail.conf
+sprueche.txt
