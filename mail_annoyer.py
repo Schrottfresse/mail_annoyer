@@ -45,7 +45,7 @@ def send_mail():
         logging.error(exc)
 
     rand_time = 1800 + randint(0, 30) * 60
-    logging.info("Next mail in " + str(1800 + rand_minute) + " seconds.")
+    logging.info("Next mail in " + str(rand_time) + " seconds.")
     s.enter(rand_time, 0, read_config, ("mail.conf", ))
     s.enter(rand_time, 0, read_subjects, ("sprueche.txt", ))
     s.enter(rand_time, 1, send_mail)
