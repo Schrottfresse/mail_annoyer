@@ -6,7 +6,7 @@ import configparser
 import logging
 from email.mime.text import MIMEText
 from random import randint
-from smtplib import SMTP_SSL as SMTP
+from smtplib import SMTP
 
 
 def print_test():
@@ -28,12 +28,12 @@ def random_subject(subjects):
 def send_mail():
     msg = MIMEText("-kT-", 'plain')
     msg['Subject'] = random_subject(subjects)
-    msg['From'] = "user@mail.tld"
-    msg['To'] = "user2@mail2.tld"
+    msg['From'] = config['mail']['user']
+    msg['To'] = config['mail']['to']
 
     try:
-        conn = SMTP('localhost')
-        conn.login('user@mail.tld', 'yoursophisticatedpassword')
+        conn = SMTP(config['mail']['addr'] + ':' + config['mail']['port'])
+        conn.login(config['mail']['user'], config['mail']['pass'])
         try:
             conn.send_message(msg)
         finally:
@@ -48,7 +48,7 @@ def send_mail():
 subjects = read_subjects('sprueche.txt')
 config = configparser.ConfigParser()
 config.read("mail.conf")
-logging.basicConfig(format='%(levelname)s : %(message)s', level=getattr(logging, config['log']['level'].upper(), None))
+logging.basicConfig(format='%(levelname)s: %(message)s', level=getattr(logging, config['log']['level'].upper(), None))
 
 send_mail()
 
