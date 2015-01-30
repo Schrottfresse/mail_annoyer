@@ -9,11 +9,6 @@ from random import randint
 from smtplib import SMTP
 
 
-def print_test():
-    print(random_subject(subjects))
-    s.enter(2, 0, print_test)
-
-
 def read_subjects(filename):
     file = open(filename)
     result = [line.rstrip() for line in file]
@@ -43,7 +38,7 @@ def send_mail():
         logging.error(exc)
 
     rand_minute = randint(0,30)*60
-    #s.enter(1800+rand_minute)
+    s.enter(1800+rand_minute)
 
 
 subjects = read_subjects('sprueche.txt')
@@ -53,6 +48,6 @@ logging.basicConfig(format='%(levelname)s: %(message)s', level=getattr(logging, 
 
 send_mail()
 
-#s = sched.scheduler()
-#s.enter(2, 0, print_test)
-#s.run()
+s = sched.scheduler()
+s.enter(2, 0, send_mail)
+s.run()
