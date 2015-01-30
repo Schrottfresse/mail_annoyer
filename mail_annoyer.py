@@ -40,7 +40,7 @@ def send_mail():
 
     rand_minute = randint(0,30)*60
     logging.info("Next mail in " + str(1800 + rand_minute) + " seconds.")
-    s.enter(1800+rand_minute)
+    s.enter(1800+rand_minute, 0, send_mail)
 
 
 subjects = read_subjects('sprueche.txt')
