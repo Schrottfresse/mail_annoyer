@@ -8,12 +8,18 @@ from email.mime.text import MIMEText
 from random import randint
 from smtplib import SMTP
 
+subjects = list()
+config = None
 
 def read_subjects(filename):
     file = open(filename)
-    result = [line.rstrip() for line in file]
+    subjects = [line.rstrip() for line in file]
     file.close()
-    return result
+
+
+def read_config(filename):
+    config = configparser.ConfigParser()
+    config.read(filename)
 
 
 def random_subject(subjects):
@@ -38,14 +44,14 @@ def send_mail():
     except Exception as exc:
         logging.error(exc)
 
-    rand_minute = randint(0,30)*60
+    rand_time = 1800 + randint(0, 30) * 60
     logging.info("Next mail in " + str(1800 + rand_minute) + " seconds.")
-    s.enter(1800+rand_minute, 0, send_mail)
+    s.enter(rand_time, 0, read_config, ("mail.conf", ))
+    s.enter(rand_time, 0, read_subjects, ("sprueche.txt", ))
+    s.enter(rand_time, 1, send_mail)
 
 
-subjects = read_subjects('sprueche.txt')
-config = configparser.ConfigParser()
-config.read("mail.conf")
+read_config("mail.conf")
 logging.basicConfig(format='%(levelname)s: %(message)s', level=getattr(logging, config['log']['level'].upper(), None))
 logging.debug("Read subjects.")
 logging.debug("Read config")
