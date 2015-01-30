@@ -33,6 +33,7 @@ def send_mail():
 
     try:
         conn = SMTP(config['mail']['addr'] + ':' + config['mail']['port'])
+        conn.starttls()
         conn.login(config['mail']['user'], config['mail']['pass'])
         try:
             conn.send_message(msg)
