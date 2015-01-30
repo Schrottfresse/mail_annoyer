@@ -34,10 +34,12 @@ def send_mail():
             conn.send_message(msg)
         finally:
             conn.quit()
+            logging.info("Mail with message '" + msg['Subject'] + "' sent!")
     except Exception as exc:
         logging.error(exc)
 
     rand_minute = randint(0,30)*60
+    logging.info("Next mail in " + str(1800 + rand_minute) + " seconds.")
     s.enter(1800+rand_minute)
 
 
@@ -45,9 +47,11 @@ subjects = read_subjects('sprueche.txt')
 config = configparser.ConfigParser()
 config.read("mail.conf")
 logging.basicConfig(format='%(levelname)s: %(message)s', level=getattr(logging, config['log']['level'].upper(), None))
+logging.debug("Read subjects.")
+logging.debug("Read config")
 
-send_mail()
 
 s = sched.scheduler()
 s.enter(2, 0, send_mail)
 s.run()
+logging.debug("Started scheduler.")
