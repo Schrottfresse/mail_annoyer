@@ -52,6 +52,7 @@ def send_mail():
 
 
 read_config("mail.conf")
+read_subjects("sprueche.txt")
 logging.basicConfig(format='%(levelname)s: %(message)s', level=getattr(logging, config['log']['level'].upper(), None))
 logging.debug("Read subjects.")
 logging.debug("Read config")
