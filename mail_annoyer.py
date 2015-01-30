@@ -8,16 +8,16 @@ from email.mime.text import MIMEText
 from random import randint
 from smtplib import SMTP
 
-subjects = list()
-config = None
 
 def read_subjects(filename):
+    global subjects
     file = open(filename)
     subjects = [line.rstrip() for line in file]
     file.close()
 
 
 def read_config(filename):
+    global config
     config = configparser.ConfigParser()
     config.read(filename)
 
@@ -51,12 +51,14 @@ def send_mail():
     s.enter(rand_time, 1, send_mail)
 
 
+config = None
+subjects = list()
 read_config("mail.conf")
 read_subjects("sprueche.txt")
+
 logging.basicConfig(format='%(levelname)s: %(message)s', level=getattr(logging, config['log']['level'].upper(), None))
 logging.debug("Read subjects.")
 logging.debug("Read config")
-
 
 s = sched.scheduler()
 s.enter(2, 0, send_mail)
